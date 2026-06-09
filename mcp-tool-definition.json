@@ -1,0 +1,39 @@
+{
+  "name": "query_infrastructure",
+  "description": "Query the best cloud infrastructure option across AWS, Azure, and GCP for a given intent. Returns a normalized recommendation with a deploy-ready execution kit (Terraform + CLI), a cost estimate, and guardrail validation results.",
+  "inputSchema": {
+    "type": "object",
+    "required": ["intent", "service"],
+    "properties": {
+      "intent": {
+        "type": "string",
+        "description": "Natural-language or keyword intent, e.g. 'compute', 'managed postgres', 'object storage'."
+      },
+      "service": {
+        "type": "string",
+        "enum": ["compute", "storage", "database"],
+        "description": "Normalized service category."
+      },
+      "requirements": {
+        "type": "object",
+        "properties": {
+          "vcpus_min": { "type": "number" },
+          "memory_gb_min": { "type": "number" },
+          "storage_gb_min": { "type": "number" }
+        }
+      },
+      "constraints": {
+        "type": "object",
+        "properties": {
+          "budget_monthly_max": { "type": "number" },
+          "providers": {
+            "type": "array",
+            "items": { "type": "string", "enum": ["aws", "azure", "gcp"] }
+          },
+          "regions": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  },
+  "_note": "Sanitized MCP tool definition for documentation. Implementation is private."
+}
